@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><title>Gestion Stock Bibliothèque</title></head>
+<body>
+    <h1>Gestion du stock (Admin)</h1>
+    
+    <h3>Ajouter un livre</h3>
+    <form method="post">
+        Titre : <input type="text" name="titre" required>
+        Auteur : <input type="text" name="auteur" required>
+        <input type="submit" value="Ajouter au stock">
+    </form>
+    
+    <h3>Livres en rayon</h3>
+    <table border="1">
+        <tr><th>Titre</th><th>Auteur</th><th>Statut</th><th>Action</th></tr>
+        {% for livre in livres %}
+        <tr>
+            <td>{{ livre['titre'] }}</td>
+            <td>{{ livre['auteur'] }}</td>
+            <td>{% if livre['statut'] == 0 %}Disponible{% else %}Emprunté{% endif %}</td>
+            <td><a href="/supprimer_livre/{{ livre['id'] }}" style="color:red;">Supprimer</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="/">Retour Accueil</a></p>
+</body>
+</html>
