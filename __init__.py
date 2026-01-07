@@ -24,11 +24,20 @@ def lecture():
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
     if request.method == 'POST':
+        # Cas 1 : C'est l'Administrateur
         if request.form['username'] == 'admin' and request.form['password'] == 'password':
-            session['authentifie'] = True
+            session['user_type'] = 'admin'  # On note que c'est l'admin
             return redirect(url_for('lecture'))
+            
+        # Cas 2 : C'est l'Utilisateur simple (Exercice 2)
+        elif request.form['username'] == 'user' and request.form['password'] == '12345':
+            session['user_type'] = 'user'   # On note que c'est un user simple
+            return redirect(url_for('search_nom')) # On le renvoie vers sa page dédiée
+            
+        # Cas 3 : Identifiants incorrects
         else:
             return render_template('formulaire_authentification.html', error=True)
+
     return render_template('formulaire_authentification.html', error=False)
 
 @app.route('/fiche_client/<int:post_id>')
