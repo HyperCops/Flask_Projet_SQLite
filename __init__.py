@@ -145,5 +145,9 @@ def rendre(id):
     conn.close()
     return redirect(url_for('catalogue'))
 
+@app.route("/bonus/")
+def bonus():
+    return render_template("bonus.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
