@@ -16,12 +16,13 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Joli dégradé violet/bleu */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Le dégradé violet/bleu */
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #333;
+            overflow: hidden; /* Évite les barres de défilement */
         }
 
         /* --- 2. LA CARTE CENTRALE --- */
@@ -29,11 +30,13 @@
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Ombre douce */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             text-align: center;
             width: 90%;
             max-width: 400px;
             animation: fadeIn 1s ease-in-out;
+            position: relative;
+            z-index: 10; /* Au-dessus du fond */
         }
 
         h1 {
@@ -66,7 +69,7 @@
         }
         .btn-primary:hover {
             background-color: #5a6fd1;
-            transform: translateY(-2px); /* Petit effet de levée au survol */
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -104,16 +107,16 @@
 
         /* --- 5. LA VIDÉO CACHÉE (JUMPSCARE) --- */
         #jumpscare-video {
-            display: none;
+            display: none; /* Caché par défaut */
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             object-fit: cover;
-            z-index: 9999;
+            z-index: 9999; /* Tout devant */
             background-color: black;
         }
 
-        /* Animation d'apparition douce pour la carte */
+        /* Animation d'apparition */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -130,11 +133,8 @@
             
             <a href="/authentification" class="btn btn-secondary">Se connecter</a>
             
-            <a href="/admin_livres" class="btn btn-secondary" style="font-size: 0.8em; opacity: 0.8;">
-                🔒 Gestion Admin
             <a href="/lecture" class="btn btn-secondary" style="font-size: 0.8em; opacity: 0.8;">
                 🔒 Gestion Admin
-                
             </a>
         </div>
 
@@ -144,41 +144,3 @@
             </a>
         </div>
     </div>
-
-    <video id="jumpscare-video" preload="auto">
-        <source src="{{ url_for('static', filename='foxy_block.mp4') }}" type="video/mp4">
-    </video>
-
-    <script>
-    function lancerJumpscare() {
-        var video = document.getElementById('jumpscare-video');
-        
-        // 1. Son et Reset
-        video.muted = false;
-        video.volume = 1.0;
-        video.currentTime = 0;
-
-        // 2. Affichage
-        video.style.display = 'block';
-
-        // 3. Plein écran
-        if (video.requestFullscreen) {
-            video.requestFullscreen();
-        } else if (video.webkitRequestFullscreen) {
-            video.webkitRequestFullscreen();
-        }
-
-        // 4. Lecture
-        var playPromise = video.play();
-
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log("Erreur lecture auto : ", error);
-                video.play();
-            });
-        }
-    }
-    </script>
-
-</body>
-</html>
