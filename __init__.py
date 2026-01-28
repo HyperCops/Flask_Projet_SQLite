@@ -8,13 +8,13 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 def hello_world():
     return render_template('hello.html')
 
-# --- C'est ici que la connexion renvoie ---
 @app.route('/lecture')
 def lecture():
-    # Si on n'est pas admin, on vire vers le login
+    # Sécurité : Si pas admin, on vire
     if session.get('user_type') != 'admin':
         return redirect(url_for('authentification'))
-    # Si on est admin, on affiche le Dashboard (le fichier qu'on vient de créer)
+    
+    # SUCCÈS : On affiche le beau menu
     return render_template('admin_dashboard.html')
 
 @app.route('/authentification', methods=['GET', 'POST'])
