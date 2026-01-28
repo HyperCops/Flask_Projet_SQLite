@@ -1,30 +1,30 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-# --- Vérification utilisateur ---
-def est_authentifie():
-    return session.get('user_type') is not None
-
 @app.route('/')
 def hello_world():
     return render_template('hello.html')
 
-# --- NOUVELLE ROUTE DASHBOARD (Celle-ci remplace l'ancienne) ---
+# --- C'est ici que la connexion renvoie ---
 @app.route('/lecture')
 def lecture():
+    # Si on n'est pas admin, on vire vers le login
     if session.get('user_type') != 'admin':
         return redirect(url_for('authentification'))
+    # Si on est admin, on affiche le Dashboard (le fichier qu'on vient de créer)
     return render_template('admin_dashboard.html')
 
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
     if request.method == 'POST':
+        # Vérification Admin
         if request.form['username'] == 'admin' and request.form['password'] == 'password':
             session['user_type'] = 'admin'
             return redirect(url_for('lecture'))
+        # Vérification User simple
         elif request.form['username'] == 'user' and request.form['password'] == '12345':
             session['user_type'] = 'user'
             return redirect(url_for('search_nom'))
@@ -32,24 +32,7 @@ def authentification():
             return render_template('formulaire_authentification.html', error=True)
     return render_template('formulaire_authentification.html', error=False)
 
-@app.route('/fiche_client/<int:post_id>')
-def Readfiche(post_id):
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients WHERE id = ?', (post_id,))
-    data = cursor.fetchall()
-    conn.close()
-    return render_template('read_data.html', data=data)
-
-@app.route('/consultation/')
-def ReadBDD():
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
-    data = cursor.fetchall()
-    conn.close()
-    return render_template('read_data.html', data=data)
-
+# --- Routes Clients ---
 @app.route('/enregistrer_client', methods=['GET', 'POST'])
 def enregistrer_client():
     if request.method == 'GET':
@@ -64,10 +47,18 @@ def enregistrer_client():
     conn.close()
     return redirect('/consultation/')
 
+@app.route('/consultation/')
+def ReadBDD():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+    return render_template('read_data.html', data=data)
+
 @app.route('/fiche_nom/', methods=['GET', 'POST'])
 def search_nom():
-    user_type = session.get('user_type')
-    if not user_type:
+    if not session.get('user_type'):
         return redirect(url_for('authentification'))
     
     if request.method == 'POST':
@@ -82,6 +73,7 @@ def search_nom():
 
     return render_template('formulaire_recherche.html')
 
+# --- Routes Livres (Admin) ---
 @app.route('/admin_livres', methods=['GET', 'POST'])
 def admin_livres():
     if session.get('user_type') != 'admin':
