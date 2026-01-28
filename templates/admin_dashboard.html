@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Tableau de Bord Admin</title>
+    <title>Dashboard Administrateur</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -15,51 +15,85 @@
             margin: 0;
             color: #333;
         }
-        .dashboard-card {
+        .card {
             background: white;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             text-align: center;
         }
-        h1 { color: #4a4a4a; margin-bottom: 30px; }
-        
-        .btn-panel {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
+        h1 { color: #4a4a4a; margin-bottom: 10px; }
+        p { color: #888; margin-bottom: 30px; }
+
+        .grid-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 colonnes */
+            gap: 15px;
+        }
+
+        .btn-menu {
             background-color: #f8f9fa;
-            border-radius: 10px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
             text-decoration: none;
             color: #555;
             font-weight: 600;
             transition: all 0.3s;
-            border: 1px solid #eee;
-            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        .btn-panel:hover {
+
+        .btn-menu:hover {
             background-color: #667eea;
             color: white;
-            transform: translateY(-2px);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
-        .logout-link { display: block; margin-top: 20px; color: #c0392b; text-decoration: none; }
+
+        .icon { font-size: 2rem; }
+
+        .logout {
+            display: inline-block;
+            margin-top: 30px;
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
-    <div class="dashboard-card">
-        <h1>⚙️ Admin Dashboard</h1>
-        
-        <a href="/admin_livres" class="btn-panel">📚 Gestion Livres</a>
-        <a href="/enregistrer_client" class="btn-panel">👤 Nouveau Client</a>
-        <a href="/consultation/" class="btn-panel">📋 Liste Clients</a>
-        <a href="/rapport/" class="btn-panel">📈 Graphique Météo</a>
-        
-        <a href="/histogramme/" class="btn-panel">📊 Histogramme</a>
+    <div class="card">
+        <h1>⚙️ Espace Administrateur</h1>
+        <p>Que souhaitez-vous gérer aujourd'hui ?</p>
 
-        <a href="/" class="logout-link">Se déconnecter</a>
+        <div class="grid-menu">
+            <a href="/admin_livres" class="btn-menu">
+                <span class="icon">📚</span>
+                <span>Gérer les Livres</span>
+            </a>
+
+            <a href="/enregistrer_client" class="btn-menu">
+                <span class="icon">👤</span>
+                <span>Ajouter Client</span>
+            </a>
+
+            <a href="/consultation/" class="btn-menu">
+                <span class="icon">📋</span>
+                <span>Liste Clients</span>
+            </a>
+
+            <a href="/rapport/" class="btn-menu">
+                <span class="icon">📈</span>
+                <span>Statistiques</span>
+            </a>
+        </div>
+
+        <a href="/" class="logout">Se déconnecter</a>
     </div>
 </body>
 </html>
