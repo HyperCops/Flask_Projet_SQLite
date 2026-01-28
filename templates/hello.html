@@ -6,7 +6,47 @@
     <li><a href="/catalogue">Voir le catalogue (Pour tous)</a></li>
     <li><a href="/admin_livres">Gestion des livres (Admin seulement)</a></li>
     <li><a href="/authentification">Se connecter</a></li>
-    <p>
-    <a href="{{ url_for('bonus') }}" style="font-weight: bold; color: gold;">🎁 Cliquez ici pour le BONUS !</a>
+    <style>
+    #jumpscare-video {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        object-fit: cover;
+        z-index: 9999;
+        background-color: black;
+    }
+</style>
+
+<p>
+    <a href="javascript:void(0)" onclick="lancerJumpscare()" style="color: gold; font-weight: bold; text-decoration: none;">
+        🎁 Cliquez ici pour le BONUS !
+    </a>
 </p>
+
+<video id="jumpscare-video">
+    <source src="{{ url_for('static', filename='foxy.mp4') }}" type="video/mp4">
+</video>
+
+<script>
+function lancerJumpscare() {
+    var video = document.getElementById('jumpscare-video');
+    
+    // 1. On affiche la vidéo
+    video.style.display = 'block';
+    
+    // 2. On tente de mettre en plein écran réel (optionnel mais efficace)
+    if (video.requestFullscreen) {
+        video.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+    }
+
+    // 3. On lance la vidéo avec le SON (ça marche car il y a eu un clic sur le lien)
+    video.play();
+
+    // 4. On remet le son au cas où (volume entre 0.0 et 1.0)
+    video.volume = 1.0;
+}
+</script>
 </ul>
