@@ -25,73 +25,39 @@
             text-align: center;
         }
         h1 { color: #4a4a4a; margin-bottom: 30px; }
-        h3 { color: #888; font-size: 1rem; margin-bottom: 20px; font-weight: 400; }
-
-        .grid-menu {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Deux colonnes */
-            gap: 15px;
-        }
-
+        
         .btn-panel {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
             background-color: #f8f9fa;
-            border-radius: 15px;
+            border-radius: 10px;
             text-decoration: none;
             color: #555;
             font-weight: 600;
             transition: all 0.3s;
             border: 1px solid #eee;
+            box-sizing: border-box;
         }
-
         .btn-panel:hover {
             background-color: #667eea;
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
         }
-
-        .full-width { grid-column: span 2; } /* Bouton qui prend toute la largeur */
-
-        .logout-link {
-            display: block;
-            margin-top: 30px;
-            color: #c0392b;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
+        .logout-link { display: block; margin-top: 20px; color: #c0392b; text-decoration: none; }
     </style>
 </head>
 <body>
     <div class="dashboard-card">
         <h1>⚙️ Admin Dashboard</h1>
-        <h3>Que souhaitez-vous gérer ?</h3>
-
-        <div class="grid-menu">
-            <a href="/admin_livres" class="btn-panel">
-                📚<br>Gestion Livres
-            </a>
-
-            <a href="/enregistrer_client" class="btn-panel">
-                👤<br>Nouveau Client
-            </a>
-
-            <a href="/consultation/" class="btn-panel">
-                📋<br>Liste Clients
-            </a>
-            
-            <a href="/rapport/" class="btn-panel">
-                📈<br>Météo (Courbe)
-            </a>
-
-            <a href="/histogramme/" class="btn-panel full-width">
-                📊 Voir l'Histogramme
-            </a>
-        </div>
+        
+        <a href="/admin_livres" class="btn-panel">📚 Gestion Livres</a>
+        <a href="/enregistrer_client" class="btn-panel">👤 Nouveau Client</a>
+        <a href="/consultation/" class="btn-panel">📋 Liste Clients</a>
+        <a href="/rapport/" class="btn-panel">📈 Graphique Météo</a>
+        
+        <a href="/histogramme/" class="btn-panel">📊 Histogramme</a>
 
         <a href="/" class="logout-link">Se déconnecter</a>
     </div>
