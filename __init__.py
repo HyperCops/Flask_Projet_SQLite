@@ -149,5 +149,12 @@ def rendre(id):
 def bonus():
     return render_template("bonus.html")
 
+@app.route('/lecture')
+def lecture():
+    if session.get('user_type') != 'admin':
+        return redirect(url_for('authentification'))
+    # C'EST ICI QUE ÇA CHANGE : on affiche le template Dashboard
+    return render_template('admin_dashboard.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
