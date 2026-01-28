@@ -1,13 +1,10 @@
-from flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session
-from flask import json
-from urllib.request import urlopen
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session
 import sqlite3
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-# --- CORRECTION 1 : On vérifie maintenant le type d'utilisateur ---
+# --- Vérification utilisateur ---
 def est_authentifie():
     return session.get('user_type') is not None
 
@@ -15,11 +12,12 @@ def est_authentifie():
 def hello_world():
     return render_template('hello.html')
 
+# --- NOUVELLE ROUTE DASHBOARD (Celle-ci remplace l'ancienne) ---
 @app.route('/lecture')
 def lecture():
     if session.get('user_type') != 'admin':
         return redirect(url_for('authentification'))
-    return "<h2>Bravo, vous êtes authentifié en tant qu'administrateur</h2>"
+    return render_template('admin_dashboard.html')
 
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
@@ -66,7 +64,6 @@ def enregistrer_client():
     conn.close()
     return redirect('/consultation/')
 
-# --- CORRECTION 2 : Ajout du return pour le mode GET ---
 @app.route('/fiche_nom/', methods=['GET', 'POST'])
 def search_nom():
     user_type = session.get('user_type')
@@ -76,7 +73,7 @@ def search_nom():
     if request.method == 'POST':
         nom_recherche = request.form['nom']
         conn = sqlite3.connect('database.db')
-        conn.row_factory = sqlite3.Row 
+        conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM clients WHERE UPPER(nom) = UPPER(?)', (nom_recherche,))
         data = cursor.fetchall()
@@ -144,17 +141,10 @@ def rendre(id):
     conn.commit()
     conn.close()
     return redirect(url_for('catalogue'))
-    
+
 @app.route("/bonus/")
 def bonus():
     return render_template("bonus.html")
-
-@app.route('/lecture')
-def lecture():
-    if session.get('user_type') != 'admin':
-        return redirect(url_for('authentification'))
-    # C'EST ICI QUE ÇA CHANGE : on affiche le template Dashboard
-    return render_template('admin_dashboard.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
