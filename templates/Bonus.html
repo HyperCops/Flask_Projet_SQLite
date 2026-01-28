@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bonus Vidéo</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            overflow: hidden; /* Empêche le scroll */
+        }
+        video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain; /* Garde les proportions de la vidéo */
+        }
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">⬅ Retour</a>
+    
+    <video controls autoplay>
+        <source src="{{ url_for('static', filename='ma_video.mp4') }}" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture de vidéos.
+    </video>
+</body>
+</html>
