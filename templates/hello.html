@@ -16,15 +16,25 @@
         z-index: 9999;
         background-color: black;
     }
+<style>
+    #jumpscare-video {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        object-fit: cover;
+        z-index: 9999;
+        background-color: black;
+    }
 </style>
 
 <p>
-    <a href="javascript:void(0)" onclick="lancerJumpscare()" style="color: gold; font-weight: bold; text-decoration: none;">
+    <a href="javascript:void(0)" onclick="lancerJumpscare()" style="color: gold; font-weight: bold; text-decoration: none; cursor: pointer;">
         🎁 Cliquez ici pour le BONUS !
     </a>
 </p>
 
-<video id="jumpscare-video">
+<video id="jumpscare-video" preload="auto">
     <source src="{{ url_for('static', filename='foxy.mp4') }}" type="video/mp4">
 </video>
 
@@ -32,20 +42,30 @@
 function lancerJumpscare() {
     var video = document.getElementById('jumpscare-video');
     
-    // 1. On affiche la vidéo
+    // Affiche la vidéo
     video.style.display = 'block';
-    
-    // 2. On tente de mettre en plein écran réel
+
+    // FORCE LE SON : On s'assure que muted est faux et le volume au max
+    video.muted = false;
+    video.volume = 1.0;
+
+    // Tentative de plein écran (très important pour l'effet)
     if (video.requestFullscreen) {
         video.requestFullscreen();
     } else if (video.webkitRequestFullscreen) {
         video.webkitRequestFullscreen();
     }
 
-    // 3. On lance la vidéo avec le SON
-    video.play();
+    // Lance la lecture
+    var playPromise = video.play();
 
-    video.volume = 1.0;
+    // Gestion d'erreur au cas où le navigateur bloque quand même
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log("Le navigateur a bloqué le son, tentative de relance...");
+            video.play();
+        });
+    }
 }
 </script>
 </ul>
