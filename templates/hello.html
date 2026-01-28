@@ -1,9 +1,108 @@
 <!doctype html>
-<html>
+<html lang="fr">
 <head>
-    <title>Flask Server</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque Municipale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
-        /* CSS Propre */
+        /* --- 1. CONFIGURATION GÉNÉRALE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Joli dégradé violet/bleu */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        /* --- 2. LA CARTE CENTRALE --- */
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Ombre douce */
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            font-weight: 600;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        /* --- 3. LES BOUTONS --- */
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Espace entre les boutons */
+        }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #5a6fd1;
+            transform: translateY(-2px); /* Petit effet de levée au survol */
+        }
+
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        /* --- 4. LE BOUTON BONUS --- */
+        .bonus-container {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .bonus-link {
+            color: #fbbf24; /* Or */
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .bonus-link:hover {
+            color: #d97706;
+            text-decoration: underline;
+        }
+
+        /* --- 5. LA VIDÉO CACHÉE (JUMPSCARE) --- */
         #jumpscare-video {
             display: none;
             position: fixed;
@@ -13,58 +112,70 @@
             z-index: 9999;
             background-color: black;
         }
+
+        /* Animation d'apparition douce pour la carte */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-<h1>Bibliothèque</h1>
-<ul>
-    <li><a href="/catalogue">Voir le catalogue (Pour tous)</a></li>
-    <li><a href="/admin_livres">Gestion des livres (Admin seulement)</a></li>
-    <li><a href="/authentification">Se connecter</a></li>
-</ul>
+    <div class="card">
+        <h1>📚 Bibliothèque</h1>
+        
+        <div class="menu-container">
+            <a href="/catalogue" class="btn btn-primary">Voir le catalogue</a>
+            
+            <a href="/authentification" class="btn btn-secondary">Se connecter</a>
+            
+            <a href="/admin_livres" class="btn btn-secondary" style="font-size: 0.8em; opacity: 0.8;">
+                🔒 Gestion Admin
+            </a>
+        </div>
 
-<p>
-    <a href="javascript:void(0)" onclick="lancerJumpscare()" style="color: gold; font-weight: bold; text-decoration: none; cursor: pointer;">
-        🎁 Cliquez ici pour le BONUS !
-    </a>
-</p>
+        <div class="bonus-container">
+            <a onclick="lancerJumpscare()" class="bonus-link">
+                🎁 Cliquez ici pour le BONUS !
+            </a>
+        </div>
+    </div>
 
-<video id="jumpscare-video" preload="auto">
-    <source src="{{ url_for('static', filename='foxy_mais pas pour l'instant.mp4') }}" type="video/mp4">
-</video>
+    <video id="jumpscare-video" preload="auto">
+        <source src="{{ url_for('static', filename='foxy_block.mp4') }}" type="video/mp4">
+    </video>
 
-<script>
-function lancerJumpscare() {
-    var video = document.getElementById('jumpscare-video');
-    
-    // 1. Préparer le son et le temps AVANT d'afficher
-    video.muted = false;
-    video.volume = 1.0;
-    video.currentTime = 0; // Force le retour au début pour éviter le lag
+    <script>
+    function lancerJumpscare() {
+        var video = document.getElementById('jumpscare-video');
+        
+        // 1. Son et Reset
+        video.muted = false;
+        video.volume = 1.0;
+        video.currentTime = 0;
 
-    // 2. Afficher la vidéo
-    video.style.display = 'block';
+        // 2. Affichage
+        video.style.display = 'block';
 
-    // 3. Tenter le plein écran
-    if (video.requestFullscreen) {
-        video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
+        // 3. Plein écran
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+            video.webkitRequestFullscreen();
+        }
+
+        // 4. Lecture
+        var playPromise = video.play();
+
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Erreur lecture auto : ", error);
+                video.play();
+            });
+        }
     }
-
-    // 4. Lancer la lecture
-    var playPromise = video.play();
-
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            // Si le navigateur bloque encore, on relance au clic
-            console.log("Tentative de relance forcée...");
-            video.play();
-        });
-    }
-}
-</script>
+    </script>
 
 </body>
 </html>
