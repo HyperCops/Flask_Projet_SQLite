@@ -33,7 +33,7 @@
 <body>
     <a href="/" class="back-btn">⬅ Retour</a>
     
-    <video controls autoplay>
+    <video controls autoplay muted playsinline>
         <source src="{{ url_for('static', filename='foxy.mp4') }}" type="video/mp4">
         Votre navigateur ne supporte pas la lecture de vidéos.
     </video>
