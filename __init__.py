@@ -8,23 +8,30 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 def hello_world():
     return render_template('hello.html')
 
+# --- ROUTE DE DÉCONNEXION (CELLE QUI MANQUAIT) ---
+@app.route('/logout')
+def logout():
+    session.clear() # Supprime toutes les infos de connexion (cookies)
+    return redirect(url_for('hello_world')) # Renvoie à l'accueil
+
+# --- DASHBOARD ADMIN ---
 @app.route('/lecture')
 def lecture():
-    # Sécurité : Si pas admin, on vire
     if session.get('user_type') != 'admin':
         return redirect(url_for('authentification'))
-    
-    # SUCCÈS : On affiche le beau menu
     return render_template('admin_dashboard.html')
 
+# --- AUTHENTIFICATION ---
 @app.route('/authentification', methods=['GET', 'POST'])
 def authentification():
     if request.method == 'POST':
-        # Vérification Admin
+        # Admin
         if request.form['username'] == 'admin' and request.form['password'] == 'password':
             session['user_type'] = 'admin'
+            # CORRECTION ICI : On redirige bien vers 'lecture' (le dashboard), pas 'admin_livres'
             return redirect(url_for('lecture'))
-        # Vérification User simple
+        
+        # User simple
         elif request.form['username'] == 'user' and request.form['password'] == '12345':
             session['user_type'] = 'user'
             return redirect(url_for('search_nom'))
@@ -32,7 +39,7 @@ def authentification():
             return render_template('formulaire_authentification.html', error=True)
     return render_template('formulaire_authentification.html', error=False)
 
-# --- Routes Clients ---
+# --- CLIENTS ---
 @app.route('/enregistrer_client', methods=['GET', 'POST'])
 def enregistrer_client():
     if request.method == 'GET':
@@ -73,7 +80,7 @@ def search_nom():
 
     return render_template('formulaire_recherche.html')
 
-# --- Routes Livres (Admin) ---
+# --- LIVRES ---
 @app.route('/admin_livres', methods=['GET', 'POST'])
 def admin_livres():
     if session.get('user_type') != 'admin':
