@@ -144,7 +144,7 @@ def rendre(id):
     conn.commit()
     conn.close()
     return redirect(url_for('catalogue'))
-
+    
 @app.route("/bonus/")
 def bonus():
     return render_template("bonus.html")
