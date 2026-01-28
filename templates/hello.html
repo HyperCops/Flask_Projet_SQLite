@@ -1,32 +1,28 @@
 <!doctype html>
-<title>Flask Server</title>
+<html>
+<head>
+    <title>Flask Server</title>
+    <style>
+        /* CSS Propre */
+        #jumpscare-video {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            object-fit: cover;
+            z-index: 9999;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
 
 <h1>Bibliothèque</h1>
 <ul>
     <li><a href="/catalogue">Voir le catalogue (Pour tous)</a></li>
     <li><a href="/admin_livres">Gestion des livres (Admin seulement)</a></li>
     <li><a href="/authentification">Se connecter</a></li>
-    <style>
-    #jumpscare-video {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        object-fit: cover;
-        z-index: 9999;
-        background-color: black;
-    }
-<style>
-    #jumpscare-video {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        object-fit: cover;
-        z-index: 9999;
-        background-color: black;
-    }
-</style>
+</ul>
 
 <p>
     <a href="javascript:void(0)" onclick="lancerJumpscare()" style="color: gold; font-weight: bold; text-decoration: none; cursor: pointer;">
@@ -42,30 +38,33 @@
 function lancerJumpscare() {
     var video = document.getElementById('jumpscare-video');
     
-    // Affiche la vidéo
-    video.style.display = 'block';
-
-    // FORCE LE SON : On s'assure que muted est faux et le volume au max
+    // 1. Préparer le son et le temps AVANT d'afficher
     video.muted = false;
     video.volume = 1.0;
+    video.currentTime = 0; // Force le retour au début pour éviter le lag
 
-    // Tentative de plein écran (très important pour l'effet)
+    // 2. Afficher la vidéo
+    video.style.display = 'block';
+
+    // 3. Tenter le plein écran
     if (video.requestFullscreen) {
         video.requestFullscreen();
     } else if (video.webkitRequestFullscreen) {
         video.webkitRequestFullscreen();
     }
 
-    // Lance la lecture
+    // 4. Lancer la lecture
     var playPromise = video.play();
 
-    // Gestion d'erreur au cas où le navigateur bloque quand même
     if (playPromise !== undefined) {
         playPromise.catch(error => {
-            console.log("Le navigateur a bloqué le son, tentative de relance...");
+            // Si le navigateur bloque encore, on relance au clic
+            console.log("Tentative de relance forcée...");
             video.play();
         });
     }
 }
 </script>
-</ul>
+
+</body>
+</html>
