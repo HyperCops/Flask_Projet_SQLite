@@ -1,18 +1,89 @@
 <!doctype html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <title>Recherche Client</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        h1 { font-size: 1.4rem; color: #333; margin-bottom: 30px; }
+
+        form { display: flex; flex-direction: column; gap: 15px; }
+        
+        .search-box { text-align: left; }
+        label { display: block; margin-bottom: 8px; color: #666; font-weight: 500; }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        input[type="text"]:focus { border-color: #667eea; outline: none; }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        input[type="submit"]:hover { background-color: #5a6fd1; }
+
+        /* Bouton Déconnexion style "danger" doux */
+        .logout-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            color: #c0392b;
+            background-color: #fadbd8;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover { background-color: #f5b7b1; }
+    </style>
 </head>
 <body>
-    <h1>Rechercher un client par nom</h1>
-    
-    <form action="/fiche_nom/" method="post">
-        <label for="nom">Nom du client :</label>
-        <input type="text" name="nom" required>
-        <input type="submit" value="Rechercher">
-    </form>
-    
-    <br>
-    <a href="/authentification">Se déconnecter / Changer de compte</a>
+    <div class="card">
+        <h1>🔍 Rechercher un client</h1>
+        
+        <form action="/fiche_nom/" method="post">
+            <div class="search-box">
+                <label for="nom">Nom du client :</label>
+                <input type="text" name="nom" placeholder="Entrez un nom..." required>
+            </div>
+            <input type="submit" value="Rechercher">
+        </form>
+        
+        <a href="/authentification" class="logout-btn">
+            🚪 Se déconnecter
+        </a>
+    </div>
 </body>
 </html>
