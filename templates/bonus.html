@@ -2,55 +2,40 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>⚠️ ATTENTION ⚠️</title>
+    <title>Bonus Vidéo</title>
     <style>
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: black; color: white;
-            display: flex; justify-content: center; align-items: center;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden; cursor: pointer;
-        }
-        #overlay {
-            text-align: center;
-            z-index: 10;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            overflow: hidden; /* Empêche le scroll */
         }
         video {
-            display: none; /* Caché au début */
-            width: 100vw; height: 100vh;
-            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain; /* Garde les proportions de la vidéo */
         }
-        .warning { color: red; font-size: 2em; margin-bottom: 20px; }
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+            z-index: 10;
+        }
     </style>
 </head>
-<body onclick="launchJumpscare()">
-
-    <div id="overlay">
-        <div class="warning">CONTENU SENSIBLE</div>
-        <p>Cliquez n'importe où pour confirmer que vous avez plus de 18 ans.</p>
-    </div>
-
-    <video id="scaryVideo">
+<body>
+    <a href="/" class="back-btn">⬅ Retour</a>
+    
+    <video controls autoplay muted playsinline>
         <source src="{{ url_for('static', filename='foxy.mp4') }}" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture de vidéos.
     </video>
-
-    <script>
-        function launchJumpscare() {
-            var video = document.getElementById('scaryVideo');
-            var overlay = document.getElementById('overlay');
-
-            // 1. Cacher le texte
-            overlay.style.display = 'none';
-            // 2. Afficher la vidéo
-            video.style.display = 'block';
-            // 3. Lancer la vidéo avec le son
-            video.play();
-            
-            // Optionnel : passer en vrai plein écran (ne marche pas sur tous les navigateurs)
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            }
-        }
-    </script>
 </body>
 </html>
