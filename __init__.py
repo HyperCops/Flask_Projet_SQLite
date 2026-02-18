@@ -145,5 +145,56 @@ def rendre(id):
 def bonus():
     return render_template("bonus.html")
 
+# ==========================================
+# PROJET 2 : GESTIONNAIRE DE TÂCHES (TO-DO)
+# ==========================================
+
+@app.route('/taches')
+def liste_taches():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    # On récupère les tâches (les non terminées en premier)
+    cursor.execute('SELECT * FROM taches ORDER BY complete ASC, date_echeance ASC')
+    taches = cursor.fetchall()
+    conn.close()
+    return render_template('todo_liste.html', taches=taches)
+
+@app.route('/ajouter_tache', methods=['GET', 'POST'])
+def ajouter_tache():
+    if request.method == 'POST':
+        titre = request.form['titre']
+        description = request.form['description']
+        date_echeance = request.form['date_echeance']
+        
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO taches (titre, description, date_echeance) VALUES (?, ?, ?)', 
+                       (titre, description, date_echeance))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('liste_taches'))
+    
+    return render_template('todo_ajouter.html')
+
+@app.route('/terminer_tache/<int:id>')
+def terminer_tache(id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    # On passe le statut complete à 1 (Vrai)
+    cursor.execute('UPDATE taches SET complete = 1 WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('liste_taches'))
+
+@app.route('/supprimer_tache/<int:id>')
+def supprimer_tache(id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM taches WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('liste_taches'))
+
 if __name__ == "__main__":
     app.run(debug=True)
